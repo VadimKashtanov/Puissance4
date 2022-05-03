@@ -1,6 +1,11 @@
 import tkinter as tk
 import random
 
+#<vadim> cette partie de tkinter permet d'afficher des info facilement dans une fenetre
+from tkinter.messagebox import showinfo
+#<vadim> ou d'ouvrire un fichier avec le gestionnaire de fichier local
+from tkinter.filedialog import askopenfile
+
 nbre_colonne = 7
 nbre_ligne = 6
 
@@ -16,9 +21,9 @@ grille = []
 
 def création_grille():
     global grille
-    for i in range(7):
+    for i in range(nbre_colonne):
         grille.append([])
-        for j in range(6):
+        for j in range(nbre_ligne):
             grille[i].append(0)
     return grille
     
@@ -117,7 +122,15 @@ def alignement():
 
 
 def charger():
-    pass
+    global grille, nbre_colonne, nbre_ligne
+    with open(askopenfile(title="Select a file", filetypes=[("all files","*.*")]), "r") as FILE:
+        contenue = [int(i) for i in FILE.read().split(',')]
+        X = contenue[0]
+        Y = contenue[1]
+        grille_fichier = contenue[2:]
+        grille = [[grille_fichier[y*X + x] for x in range(X)] for y in range(Y)]
+        nbre_colonne = X
+        nbre_ligne = Y
 
 def sauvegarder():
     pass
