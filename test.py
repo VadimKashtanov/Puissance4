@@ -1,4 +1,4 @@
-import tkinter as tk
+"""import tkinter as tk
 from tkinter.messagebox import showinfo
 
 X,Y = 7,6
@@ -107,4 +107,10 @@ if __name__ == "__main__":
 
 	X,Y,ZOOM = int(sX.get()), int(sY.get()), int(sZOOM.get())
 
-	Main()
+	Main()"""
+
+import tkinter as tk
+from tkinter.messagebox import showinfo
+
+X,Y = 7,6
+ZOOM = 50
