@@ -17,3 +17,5 @@ djalil: djalil.benyelles@ens.uvsq.fr
 ## Fichier Principale
 
 "main.py" - Est le fichier finale claire
+
+en soit tout est deja dans "test.py", mais avec que 2 joueur, et pas extrement propre
