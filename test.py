@@ -275,7 +275,7 @@ def IA():
 		disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
 		x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
 
-	elif IA_MODE == 1:
+	elif IA_MODE == 1:	#pour l'instant c'est la meme chose que IA_MODE == 0. Il faut juste que je cherche un endroit ou il y a une suite et puis c'est tout
 		disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
 		x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
 
