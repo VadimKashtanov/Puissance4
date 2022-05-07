@@ -247,17 +247,19 @@ if IA_PLAYER0 == True:
 ###################################
 from tkinter import filedialog
 def sauvegarde():
-	with open(filedialog.askopenfile(initialdir="."), "w") as fic:
+	#ne pas toucher, ca marche pas encore, y a quelques debugs a faire et ca fonctionnera
+	'''with open(filedialog.askopenfile(initialdir="."), "w") as fic:
 		for y in range(Y):
 			for x in range(X):
 				fic.write(str(grid[y][x]) +",")
-			fic.write('\n')
+			fic.write('\n')'''
 
 s = tk.Button(root, text= "sauvegarde", command= sauvegarde)
 s.grid(row= 0, column= X+1)
 
 def charge():
-	with open(filedialog.askopenfile(initialdir="."), "r") as fic:
+	#ne pas toucher, ca marche pas encore, y a quelques debugs a faire et ca fonctionnera
+	'''with open(filedialog.askopenfile(initialdir="."), "r") as fic:
 		grille = fic.read().replace('\n',',').split(',')
 		for y in range(Y):
 			for x in range(X):
@@ -265,7 +267,7 @@ def charge():
 				canvas[y][x].delete('all')
 				if grid[y][x] != 0:
 					tracer_cercle(y, x, ("red" if grid[y][x] == 1 else "yellow"))
-				canvas[y][x].bind("<Button-1>", lambda event, x= x: tour_de_jeu(x))
+				canvas[y][x].bind("<Button-1>", lambda event, x= x: tour_de_jeu(x))'''
 				
 
 c = tk.Button(root, text= "charge", command= charge)
