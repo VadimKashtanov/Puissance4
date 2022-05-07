@@ -33,7 +33,7 @@ def tour_de_jeu(x):
 		# le cercle apparait sur l'image
 		tracer_cercle(y, x, ("red" if tour == 0 else "yellow"))
 		# vérifie s'il y a alignement
-		root.after(200, check_win)
+		root.after(50, check_win)
 
 	# modifie la couleur de la bannière pour le prochain joueur
 	for x in range(X):
@@ -70,17 +70,26 @@ def clic(tour_joueur, x):
 
 
 def ligne(_sum, y, x, __y, __x):
+	'''
+	C'est une fonction recurente qui fait partie de l'analyse du gagnant.
+	A partire d'une position (y,x) va avancer par recurence dans la grille en s'auto appellant tant qu'il n'y a pas de jeton adverse ou de vide.
+	Par exemple on commence a (0,0) et comme `pas` (1,1), le fonction va call (0,0), (1,1), (2,2) ... (n,m) tant qu'il y a un jeton du joueur analysé en ce moment.
+	__y,__x etant ls pas fait a chaque fois pour avancer dans la grille. Ca peut etre (-1,1) (1,1) (0,-1) ...
+	'''
 	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_PLAYER0, IA_PLAYER1, IA_MODE
 
-	if X == x  or x < 0 or Y == y  or y < 0:
+	if X == x  or x < 0 or Y == y  or y < 0:	#Dans le cas ou la fonction analyse une case sortie en dehor du tableau
 		return _sum
-	elif grid[y][x] == tour+1:
+	elif grid[y][x] == tour+1:	#dans le cas ou la case actuellement regardé comporte un jeton de la couleur du joueur analysé (`tour+1`)
 		return ligne(_sum+1, y+__y, x+__x, __y, __x)
-	else:
+	else:	#Sinon on revoit la somme de jetons compté dans une direction
 		return _sum
 
 
 def check_position(y, x):
+	'''
+	A partire d'un point (y,x) on check dans toutes les directions si il y a des lignes de jetons du joueur analysé
+	'''
 	a_droite = ligne(0, y, x+1, 0, 1)
 	a_gauche = ligne(0, y, x-1, 0, -1)
 	en_haut = ligne(0, y-1, x, -1, 0)
@@ -89,35 +98,49 @@ def check_position(y, x):
 	diag_nord_est = ligne(0, y-1, x+1, -1, 1)
 	diag_sud_ouest = ligne(0, y+1, x-1, 1, -1)
 	diag_sud_est = ligne(0, y+1, x+1, 1, 1)
-
-	a = (a_droite + 1 + a_gauche == 4)
-	b = (en_haut + 1 + en_bas == 4)
-	c = (diag_nord_ouest + 1 + diag_sud_est == 4)
-	d = (diag_nord_est + 1 + diag_sud_ouest == 4)
-
-	return a or b or c or d
+	# + 1 +   car on avait vu avant qu'en (x,y) il y a un jetons du joueur analysé
+	a = (a_droite + 1 + a_gauche >= 4)	#horizontale
+	b = (en_haut + 1 + en_bas >= 4)		#verticale
+	c = (diag_nord_ouest + 1 + diag_sud_est >= 4)	#diagonale nord_ouest -> sud_est
+	d = (diag_nord_est + 1 + diag_sud_ouest >= 4)	#diagonale nord_est -> sud_ouest
+	
+	return a or b or c or d	#si il y a au moin 4 jetons aliges d'une meme couleur
 
 
 def check_win():
-	
+	'''
+	On cherche si il y a 4 jetons alignés.
+	Pour ca on cherche a partire de toutes les position (0 ... X; 0 ... Y) les alignements
+	'''
 	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_PLAYER0, IA_PLAYER1, IA_MODE
 
 	global score1, score2
 
+	#	Boucle toutes les cases
 	for y in range(Y):
 		for x in range(X):
+			#	Si la case actuelle a un jeton de la couleur du joueur analysé
 			if grid[y][x] == tour+1:
+				#	On cherche si ce jeton fait partie d'un alignement
 				if check_position(y, x):
+					
+					#	Fin de partie
 					showinfo("BRAVO !", f"Le {('rouge' if tour == 0 else 'jaune')} a gagné !")
 					
 					if tour == 0:
 						manches.config(text= str(score1 +1) + str(score2))
 					elif tour == 1:
 						manches.config(text= str(score1) + str(score2 +1))
-					
-
-
-					
+						
+					#	On reinitialise Toute la grille
+					reinit_grid()
+def reinit_grid():
+	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_PLAYER0, IA_PLAYER1, IA_MODE
+	
+	for x in range(X):
+		for y in range(Y):
+			grid[y][x] = 0
+			canvas[y][x].delete('all')
 
 def tracer_cercle(y, x, couleur):
 	""" trace un cercle correspondant aux paramètres:
