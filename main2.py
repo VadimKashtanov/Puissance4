@@ -4,6 +4,20 @@ import tkinter as tk
 from tkinter.messagebox import showinfo
 from random import randint
 
+'''
+Couleurs:
+
+rouge = 1er joueur
+jaune = 2nd joueur
+
+tour = 0 = 1er joueur
+     = 1 = 2nd
+     
+grid = 0 = personne
+     = 1 = rouge
+     = 2 = jaune
+'''
+
 #############################
 
 # fonctions de gestion du GUI
@@ -160,6 +174,9 @@ def tracer_cercle(y, x, couleur):
 # partie IA
 
 def IA():
+	'''
+	Apres qu'un vrai joueur ai joué, IA() est lancé pour poser un jeton
+	'''
 	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_PLAYER0, IA_PLAYER1, IA_MODE
 
 	x = 0 		#?
@@ -228,24 +245,28 @@ if IA_PLAYER0 == True:
 	IA()
 
 ###################################
-
+from tkinter import filedialog
 def sauvegarde():
-
-    fic = open("sauvegarde.txt", "w")
-    for y in range(Y):
-      for x in range(X):
-          fic.write(str(grid[y][x]) +"\n")
-    fic.close()
+	with open(filedialog.askopenfile(initialdir="."), "w") as fic:
+		for y in range(Y):
+			for x in range(X):
+				fic.write(str(grid[y][x]) +",")
+			fic.write('\n')
 
 s = tk.Button(root, text= "sauvegarde", command= sauvegarde)
 s.grid(row= 0, column= X+1)
 
 def charge():
-
-	fic = open("sauvegarde.txt", "r")
-	for ligne in fic:
-		print(ligne)
-	fic.close()
+	with open(filedialog.askopenfile(initialdir="."), "r") as fic:
+		grille = fic.read().replace('\n',',').split(',')
+		for y in range(Y):
+			for x in range(X):
+				grid[y][x] = grille[y*X + x]
+				canvas[y][x].delete('all')
+				if grid[y][x] != 0:
+					tracer_cercle(y, x, ("red" if grid[y][x] == 1 else "yellow"))
+				canvas[y][x].bind("<Button-1>", lambda event, x= x: tour_de_jeu(x))
+				
 
 c = tk.Button(root, text= "charge", command= charge)
 c.grid(row= 0, column= X+2)
