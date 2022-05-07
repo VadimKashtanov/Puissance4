@@ -9,13 +9,12 @@ pierre : pierre.lions@ens.uvsq.fr
 djalil: djalil.benyelles@ens.uvsq.fr
 
 
-## Fichiers Teste:
-"puissance4 test2.py" - est un teste
+## Test
+Tous les fichier pas dans "Projet/" sont des tests
 
-"test.py" - est un teste initiallement avec une Classe, on y ajoutera le meme code sans classes
+## Projet
+Projet/
 
-## Fichier Principale
+``` gui.py ``` comporte toutes les fonctions graphiques
 
-"main.py" - Est le fichier finale claire
-
-en soit tout est deja dans "test.py", mais avec que 2 joueur, et pas extrement propre
+``` algo.py ``` comporte toutes les fonctions logiques du puissance 4
