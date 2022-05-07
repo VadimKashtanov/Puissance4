@@ -2,7 +2,6 @@
 
 import tkinter as tk
 from tkinter.messagebox import showinfo
-from time import sleep
 from random import randint
 
 #############################
@@ -133,13 +132,13 @@ def check_win():
 						manches.config(text= str(score1) + str(score2 +1))
 						
 					#	On reinitialise Toute la grille
-					reinit_grid()
-def reinit_grid():
+					reinit_grid([[0 for x in range(X)] for y in range(Y)])
+def reinit_grid(new_grid):
 	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_PLAYER0, IA_PLAYER1, IA_MODE
 	
 	for x in range(X):
 		for y in range(Y):
-			grid[y][x] = 0
+			grid[y][x] = new_grid[y][x]
 			canvas[y][x].delete('all')
 
 def tracer_cercle(y, x, couleur):
