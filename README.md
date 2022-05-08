@@ -27,3 +27,7 @@ Si vous voulez changer le niveau de l'IA ou desactiver l'IA, utilisez le menu : 
 Vous pouvez cree des nouvelles parties de la taille que vous voulez avec `File` -> `Nouveau`
 
 Vous pouvez saugarder et jouer plus tard avec `File` -> `Sauvgarder`/`Charger`   en utilisant un fichier tier (ex : save)
+
+## Les fichiers de teste
+
+Les autres fichiers, sont la que pour montrer l'evolution du code et/ou revenire plus vite en arriere sans aller creuser l'historique des pushs
