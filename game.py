@@ -330,11 +330,15 @@ def IA():
 		x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
 
 	elif IA_MODE == 2:
-		if randint(0,1) == 0:
+		if grid[0][last_x_1st_player] != 0:
 			disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
 			x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
 		else:
-			x = last_x_1st_player
+			if randint(0,1) == 0:
+				disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
+				x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
+			else:
+				x = last_x_1st_player
 
 	y = clic(2, x)	# tour+1 est la couleur (0+1=1=1st, 1+1=2=nd), sauf que on stoque juste 0,1,2 dans grid (pas les couleurs)
 
