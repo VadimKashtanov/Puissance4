@@ -174,12 +174,14 @@ def menu_edit_null_color():
 	update_graphics()
 
 def menu_edit_IA():
-	global IA_MODE
+	global IA_MODE, label_2nd_player
 
 	ias = ['Jouer Reel', 'Mode Aleatoire', 'IA Inteligente']
 
 	Toplevel_list(ias, title="IA")	#store in _x
 	IA_MODE = ias.index(_x)
+	
+	label_2nd_player.config(text=f"2nd joueur IA mode : {_x}")
 
 # = Aide =
 
@@ -501,5 +503,8 @@ if __name__ == "__main__":
 
 	jeux = tk.Label(root, text="Egalitee")
 	jeux.pack()#grid(row=3,column=0)
+	
+	label_2nd_player = tk.Label(root, text="2nd joueur IA mode : Niveau Aleatoire")
+	label_2nd_player.pack()
 
 	root.mainloop()
