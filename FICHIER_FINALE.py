@@ -109,7 +109,7 @@ X,Y, SIZE = 7,6, 50											#	Parametres de la grille
 tour = 0													#	0 = 1er joueur, 1 = 2nd joueur
 banniere, canvas = None, None, None							#	Liste des widgets	
 root, grid_frame, banniere_frame = None,None,None,None		#	Les conteneur tkinter
-IAMODE = 0													#	0 = reel 2nd joueur, 1 = aleatoire, 2 = une IA
+IAMODE = 0 													#	0 = reel 2nd joueur, 1 = aleatoire, 2 = une IA
 color_null, color_1er, color_2nd = 'white', 'red', 'yellow'	#	Couleur des casses ou jetons
 if __name__ == "__main__":
 	root = tk.Tk()
