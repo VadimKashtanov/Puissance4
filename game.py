@@ -20,6 +20,8 @@ ia_en_train_de_jouer = False
 
 disponible_colors = ['white', 'red', 'blue', 'yellow', 'black']
 
+last_x_1st_player = 0	#dernier position du 1er joueur
+
 # === Importer toutes les libs ===
 
 import tkinter as tk
@@ -258,7 +260,7 @@ def joueur_clique_colone(x):
 	clic à la colonne souhaitée
 	"""
 
-	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, ia_en_train_de_jouer, color_list
+	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, ia_en_train_de_jouer, color_list, last_x_1st_player
 
 	if ia_en_train_de_jouer:
 		return
@@ -274,6 +276,9 @@ def joueur_clique_colone(x):
 		dessiner_jeton(x,y, color_list[tour+1])
 		# vérifie s'il y a alignement
 		check_win()
+		
+		if tour == 0:
+			last_x_1st_player = x
 	
 	# tour du joueur suivant
 	tour = (tour + 1) % 2
@@ -314,7 +319,7 @@ def IA():
 	'''
 	Apres qu'un vrai joueur ai joué, IA() est lancé pour gliser un jeton
 	'''
-	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, ia_en_train_de_jouer
+	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, ia_en_train_de_jouer, last_x_1st_player
 
 	x = 0 		# la colone ou l'IA veut glisser un jeton
 
@@ -323,8 +328,11 @@ def IA():
 		x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
 
 	elif IA_MODE == 2:
-		disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
-		x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
+		if randint(0,1) == 0:
+			disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
+			x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
+		else:
+			x = last_x_1st_player
 
 	y = clic(2, x)	# tour+1 est la couleur (0+1=1=1st, 1+1=2=nd), sauf que on stoque juste 0,1,2 dans grid (pas les couleurs)
 
