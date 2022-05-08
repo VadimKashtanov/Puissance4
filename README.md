@@ -9,12 +9,12 @@ pierre : pierre.lions@ens.uvsq.fr
 djalil: djalil.benyelles@ens.uvsq.fr
 
 
-## Test
-Tous les fichier pas dans "Projet/" sont des tests
+## Fichier finale
 
-## Projet
-Projet/
+Le fichier finale est ``` FICHIER_FINALE.py ```
 
-``` gui.py ``` comporte toutes les fonctions graphiques
+Dependances : ``` tkinter ```
 
-``` algo.py ``` comporte toutes les fonctions logiques du puissance 4
+### Launch
+
+``` python3 FICHIER_FINALE.py ```
