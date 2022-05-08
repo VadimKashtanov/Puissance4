@@ -29,21 +29,9 @@ from random import randint
 def ask_XYSIZE():
 	global X,Y,SIZE
 	variables = ('x', 1, 20, X), ('y', 1, 20, Y), ('size', 10, 100, SIZE)
-	_x,_y,_size = X,Y,SIZE
-
-	def put_results():
-		global _x,_y,_size, spins, _top
-		r = askyesnocancel("Confirmer la saisie ?")
-		if r == None:
-			_x,_y,_size = None,None,None
-			_top.quit()
-		elif r == True:
-			_x,_y,_size = [int(spins[i].get()) for i in range(len(variables))]
-			_top.quit()
-		else:
-			pass
 
 	_top = tk.Toplevel()
+
 	frames = [tk.Frame(_top) for _ in range(len(variables))]
 	for i,(name,from_,to,VAL) in enumerate(variables):
 		frames[i].pack()
@@ -55,16 +43,35 @@ def ask_XYSIZE():
 		spins[i].delete(0,2)
 		spins[i].insert(0, VAL)
 
-	tk.Button(_top, text="Ok", command=put_results).pack()
+	def put_results():
+		values = [int(spins[i].get()) for i in range(len(variables))]
+		
+		global _x,_y,_size
+
+		r = askyesnocancel("Ok ?", "Confirmer la saisie ?")
+		if r == None:
+			_x,_y,_size = None,None,None
+			_top.quit()
+		elif r == True:
+			_x,_y,_size = values
+			X,Y,SIZE = values#_x,_y,_size
+			_top.quit()
+		else:
+			pass
+
+	tk.Button(
+		_top,
+		text="Ok",
+		command=put_results
+	).pack()
 
 	_top.mainloop()
 
-	return _x,_y_,_size
-
 # = File =
 def menu_file_nouveau():
-	global X,Y,SIZE
-	_x,_y,_size = ask_XYSIZE()
+	global X,Y,SIZE,grid,_x,_y,_size
+	
+	ask_XYSIZE()
 
 	if (_x,_y,_size) == (None,None,None):
 		return
@@ -72,11 +79,12 @@ def menu_file_nouveau():
 	delet_banniere()
 	delet_grid()
 
-	grid = [[0 for x in range(X)] for y in range(Y)]
 
 	X,Y,SIZE = _x,_y,_size
-
+	grid = [[0 for x in range(X)] for y in range(Y)]
+	
 	build_banniere()
+	update_banniere()
 	build_grid()
 
 def menu_file_charger():
@@ -95,6 +103,7 @@ def menu_file_charger():
 		grid = [[int(text[y*X + x]) for x in range(X)] for y in range(Y)]
 
 	build_banniere()
+	update_banniere()
 	build_grid()
 
 def menu_file_sauvgarder():
@@ -117,6 +126,7 @@ def menu_edit_1st_color():
 	color_list[1] = ask_color()
 
 	build_banniere()
+	update_banniere()
 	build_grid()
 
 def menu_edit_2nd_color():
@@ -128,6 +138,7 @@ def menu_edit_2nd_color():
 	color_list[2] = ask_color()
 
 	build_banniere()
+	update_banniere()
 	build_grid()
 
 def menu_edit_null_color():
@@ -139,6 +150,7 @@ def menu_edit_null_color():
 	color_list[0] = ask_color()
 
 	build_banniere()
+	update_banniere()
 	build_grid()
 
 def menu_edit_IA():
@@ -177,7 +189,8 @@ Utilisez l'IA dans 2 modes differents : Aleatoire et Inteligente
 # === Fonctions de construction du GUI ===
 
 def build_banniere():
-	global banniere_frame, color_list, banniere, X, SIZE
+	global root, banniere_frame, color_list, banniere, X, SIZE
+
 	banniere = []
 	for x in range(X):
 		banniere += [tk.Canvas(banniere_frame, height=SIZE, width=SIZE, bg=color_list[0])]
@@ -212,7 +225,7 @@ def build_menu():
 	root.config(menu=menu)
 	
 def build_grid():
-	global X,Y,SIZE, grid,canvas
+	global root, X,Y,SIZE, grid,canvas, grid_frame
 
 	canvas = []
 	for y in range(Y):
@@ -345,7 +358,7 @@ def dessiner_jeton(x,y,color):
 	canvas[y][x].create_oval(0,0,SIZE-1,SIZE-1, fill=color)
 
 def delet_grid():
-	global X,Y, canvas
+	global X,Y, canvas, grid_frame
 	
 	for y in range(Y):
 		for x in range(X):
@@ -358,12 +371,13 @@ def delet_grid():
 		del canvas[0]
 
 def delet_banniere():
-	global X, banniere
+	global X, banniere, banniere_frame
 	for x in range(X):
 		banniere[x].unbind("<Button-1>")
 		banniere[x].delete('all')
 	for x in range(X):
 		del banniere[0]	#va supprimer tout
+
 
 # === Fonctions Logiques ===
 
@@ -446,6 +460,7 @@ def check_win():
 scores = [0,0]
 
 X,Y, SIZE = 7,6, 50										#	Parametres de la grille
+_x,_y,_size = 0,0,0 									#	Transition variables
 tour = 0												#	0 = 1er joueur, 1 = 2nd joueur
 banniere, canvas = [], []								#	Liste des widgets	
 root, grid_frame, banniere_frame = None,None,None		#	Les conteneur tkinter
@@ -457,8 +472,8 @@ if __name__ == "__main__":
 
 	grid_frame = tk.Frame(root)
 	banniere_frame = tk.Frame(root)
-	banniere_frame.pack()#grid(row=0,column=0)
-	grid_frame.pack()#grid(row=1,column=0)
+	banniere_frame.pack()
+	grid_frame.pack()
 
 	manches = tk.Label(root, text="Score : 0-0")
 	manches.pack()
