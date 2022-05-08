@@ -92,7 +92,7 @@ def menu_file_charger():
 
 	delet_banniere()
 	delet_grid()
-
+	#askopenfilename utilise le systeme operationnel
 	with open(filedialog.askopenfilename(), "r") as fic:
 		text = fic.read()
 		X = len(text.split('\n')[0].strip(',').split(','))
@@ -108,6 +108,7 @@ def menu_file_charger():
 
 def menu_file_sauvgarder():
 	global grid, X,Y
+	#askopenfilename = utilise le systeme operationnel
 	with open(filedialog.asksaveasfilename(), "w") as fic:
 		fic.write(
 			'\n'.join(
