@@ -262,7 +262,7 @@ def joueur_clique_colone(x):
 	clic à la colonne souhaitée
 	"""
 
-	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, ia_en_train_de_jouer, color_list, last_x_1st_player
+	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, ia_en_train_de_jouer, color_list, last_x_1st_player, label_tour
 
 	if ia_en_train_de_jouer:
 		return
@@ -284,6 +284,8 @@ def joueur_clique_colone(x):
 	
 	# tour du joueur suivant
 	tour = (tour + 1) % 2
+	
+	label_tour.config(text=f"{('1er' if tour == 0 else '2nd')} joueur")
 
 	# modifie la couleur de la bannière pour le prochain joueur
 	update_banniere()
@@ -488,7 +490,10 @@ color_list = ['white', 'red', 'yellow']					#	Couleur des casses ou jetons
 
 if __name__ == "__main__":
 	root = tk.Tk()
-
+	
+	label_tour = tk.Label(root, text="1er joueur")
+	label_tour.pack()
+	
 	grid_frame = tk.Frame(root)
 	banniere_frame = tk.Frame(root)
 
