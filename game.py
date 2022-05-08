@@ -312,21 +312,19 @@ def clic(grid_joueur, x):
 
 def IA():
 	'''
-	Apres qu'un vrai joueur ai joué, IA() est lancé pour poser un jeton
+	Apres qu'un vrai joueur ai joué, IA() est lancé pour gliser un jeton
 	'''
 	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, ia_en_train_de_jouer
 
-	x = 0 		#?
+	x = 0 		# la colone ou l'IA veut glisser un jeton
 
-	if IA_MODE == 0:
+	if IA_MODE == 1:
 		disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
 		x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
 
-	elif IA_MODE == 1:	#pour l'instant c'est la meme chose que IA_MODE == 0. Il faut juste que je cherche un endroit ou il y a une suite et puis c'est tout
+	elif IA_MODE == 2:
 		disponible_Xs = [x for x in range(X) if any(grid[Y-y-1][x] == 0 for y in range(Y))]
 		x = disponible_Xs[randint(0, len(disponible_Xs)-1)]
-
-		#Je changerais apres
 
 	y = clic(2, x)	# tour+1 est la couleur (0+1=1=1st, 1+1=2=nd), sauf que on stoque juste 0,1,2 dans grid (pas les couleurs)
 
