@@ -18,11 +18,40 @@ tour = 0	#A qui est le tour ?
 
 ia_en_train_de_jouer = False
 
+disponible_colors = ['white', 'red', 'blue', 'yellow', 'black']
+
 # === Importer toutes les libs ===
 
 import tkinter as tk
 from tkinter.messagebox import showinfo, askyesnocancel
+from tkinter import filedialog
 from random import randint
+
+def update_graphics():
+	delet_banniere()
+	delet_grid()
+
+	build_banniere()
+	update_banniere()
+	build_grid()
+
+def Toplevel_list(names, title="Top"):
+	_top = tk.Toplevel()
+	_top.title = title
+	
+	_list = tk.Listbox(_top)
+	for i in range(len(names)):
+		_list.insert(i+1, names[i])
+	_list.pack()
+
+	def put_results():
+		global _x 				#_x etant utilise comme variable temporaire
+		_x = names[_list.curselection()[0]]
+		_top.quit()
+
+	tk.Button(_top, text="Ok", command=put_results).pack()
+
+	_top.mainloop()
 
 # === Fonctions du Menu ===
 
@@ -52,10 +81,12 @@ def ask_XYSIZE():
 		if r == None:
 			_x,_y,_size = None,None,None
 			_top.quit()
+			#_top.destroy()
 		elif r == True:
 			_x,_y,_size = values
 			X,Y,SIZE = values#_x,_y,_size
 			_top.quit()
+			#_top.destroy()
 		else:
 			pass
 
@@ -79,7 +110,6 @@ def menu_file_nouveau():
 	delet_banniere()
 	delet_grid()
 
-
 	X,Y,SIZE = _x,_y,_size
 	grid = [[0 for x in range(X)] for y in range(Y)]
 	
@@ -92,8 +122,8 @@ def menu_file_charger():
 
 	delet_banniere()
 	delet_grid()
-	#askopenfilename utilise le systeme operationnel
-	with open(filedialog.askopenfilename(), "r") as fic:
+
+	with open(filedialog.askopenfilename(initialdir="."), "r") as fic:
 		text = fic.read()
 		X = len(text.split('\n')[0].strip(',').split(','))
 
@@ -108,11 +138,10 @@ def menu_file_charger():
 
 def menu_file_sauvgarder():
 	global grid, X,Y
-	#askopenfilename = utilise le systeme operationnel
 	with open(filedialog.asksaveasfilename(), "w") as fic:
 		fic.write(
 			'\n'.join(
-				','.join(grid[y][x] for x in range(X)) for y in range(Y)
+				','.join(str(grid[y][x]) for x in range(X)) for y in range(Y)
 			)
 		)
 
@@ -121,58 +150,34 @@ def menu_file_sauvgarder():
 def menu_edit_1st_color():
 	global color_list
 
-	delet_banniere()
-	delet_grid()
+	Toplevel_list(disponible_colors, title="1s player")	#store in _x
+	color_list[1] = _x
 
-	color_list[1] = ask_color()
-
-	build_banniere()
-	update_banniere()
-	build_grid()
+	update_graphics()
 
 def menu_edit_2nd_color():
 	global color_list
 
-	delet_banniere()
-	delet_grid()
+	Toplevel_list(disponible_colors, title="2nd player")	#store in _x
+	color_list[2] = _x
 
-	color_list[2] = ask_color()
-
-	build_banniere()
-	update_banniere()
-	build_grid()
+	update_graphics()
 
 def menu_edit_null_color():
 	global color_list
 
-	delet_banniere()
-	delet_grid()
+	Toplevel_list(disponible_colors, title="Null player")	#store in _x
+	color_list[0] = _x
 
-	color_list[0] = ask_color()
-
-	build_banniere()
-	update_banniere()
-	build_grid()
+	update_graphics()
 
 def menu_edit_IA():
-	global color_list
+	global IA_MODE
 
-	_top = tk.Toplevel()
-	
-	_list = tk.Listbox(_top)
-	_list.insert(1, 'Jouer Reel')
-	_list.insert(2, 'Mode Aleatoire')
-	_list.insert(3, 'IA Inteligente')
-	_list.pack()
+	ias = ['Jouer Reel', 'Mode Aleatoire', 'IA Inteligente']
 
-	def put_results():
-		global _top, _list, IA_MODE
-		IA_MODE = _list.index() - 1
-		_top.quit()
-
-	tk.Button(_top, text="Ok", command=put_results).pack()
-
-	_top.mainloop()
+	Toplevel_list(ias, title="IA")	#store in _x
+	IA_MODE = ias.index(_x)
 
 # = Aide =
 
@@ -277,7 +282,7 @@ def joueur_clique_colone(x):
 	update_banniere()
 
 	# si le joueur suivant est une IA
-	if tour == 1 and IA_MODE >= 0:
+	if tour == 1 and IA_MODE > 0:
 		#IA()
 		ia_en_train_de_jouer = True
 		root.after(1000, IA)	#sleep(2)
@@ -360,25 +365,26 @@ def dessiner_jeton(x,y,color):
 
 def delet_grid():
 	global X,Y, canvas, grid_frame
-	
-	for y in range(Y):
-		for x in range(X):
-			canvas[y][x].unbind("<Button-1>")
-			canvas[y][x].delete('all')
-			
+
 	for y in range(Y):
 		for x in range(X):
 			del canvas[0][0]
 		del canvas[0]
 
+	for widget in grid_frame.winfo_children():
+		widget.destroy()
+
+	canvas = []
+
 def delet_banniere():
 	global X, banniere, banniere_frame
-	for x in range(X):
-		banniere[x].unbind("<Button-1>")
-		banniere[x].delete('all')
+	
+	for widget in banniere_frame.winfo_children():
+		widget.destroy()
+	
 	for x in range(X):
 		del banniere[0]	#va supprimer tout
-
+	banniere = []
 
 # === Fonctions Logiques ===
 
@@ -424,7 +430,7 @@ def check_win():
 	On cherche si il y a 4 jetons alignés.
 	Pour ca on cherche a partire de toutes les position (0 ... X; 0 ... Y) les alignements
 	'''
-	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_PLAYER0, IA_PLAYER1, IA_MODE, scores
+	global X,Y,ZOOM, root, grid, tour, banniere, canvas, IA_MODE, scores
 
 	#	Boucle toutes les cases
 	for y in range(Y):
@@ -473,14 +479,6 @@ if __name__ == "__main__":
 
 	grid_frame = tk.Frame(root)
 	banniere_frame = tk.Frame(root)
-	banniere_frame.pack()
-	grid_frame.pack()
-
-	manches = tk.Label(root, text="Score : 0-0")
-	manches.pack()
-
-	jeux = tk.Label(root, text="Egalitee")
-	jeux.pack()
 
 	grid = [[0 for x in range(X)] for y in range(Y)]
 
@@ -488,5 +486,14 @@ if __name__ == "__main__":
 	build_banniere()
 	update_banniere()
 	build_grid()
-	
+
+	banniere_frame.pack()
+	grid_frame.pack()
+
+	manches = tk.Label(root, text="Score : 0-0")
+	manches.pack()#grid(row=2,column=0)
+
+	jeux = tk.Label(root, text="Egalitee")
+	jeux.pack()#grid(row=3,column=0)
+
 	root.mainloop()
