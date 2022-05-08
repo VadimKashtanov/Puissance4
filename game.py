@@ -18,7 +18,7 @@ tour = 0	#A qui est le tour ?
 
 ia_en_train_de_jouer = False
 
-disponible_colors = ['white', 'red', 'blue', 'yellow', 'black']
+disponible_colors = ['white', 'red', 'blue', 'yellow', 'black', 'cyan', 'green', 'lavender blush', 'lemon chiffon']
 
 last_x_1st_player = 0	#dernier position du 1er joueur
 
