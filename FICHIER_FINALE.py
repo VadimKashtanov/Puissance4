@@ -93,14 +93,14 @@ def menu_file_charger():
 	delet_banniere()
 	delet_grid()
 
-	with open(filedialog.askopenfilename(initialdir="."), "r") as fic:
+	with open(filedialog.askopenfilename(), "r") as fic:
 		text = fic.read()
 		X = len(text.split('\n')[0].strip(',').split(','))
 
 		numbs = text.replace(' ','').replace('\n',',').split(',')
 		Y = int(len(numbs)/X)
 		
-		grid = [[int(text[y*X + x]) for x in range(X)] for y in range(Y)]
+		grid = [[int(numbs[y*X + x]) for x in range(X)] for y in range(Y)]
 
 	build_banniere()
 	update_banniere()
@@ -108,11 +108,11 @@ def menu_file_charger():
 
 def menu_file_sauvgarder():
 	global grid, X,Y
-	with open(filedialog.askopenfilename(initialdir="."), "w") as fic:
+	with open(filedialog.asksaveasfilename(), "w") as fic:
 		fic.write(
 			'\n'.join(
-				','.join(grid[y][x] for x in range(X))
-			) for y in range(Y)
+				','.join(grid[y][x] for x in range(X)) for y in range(Y)
+			)
 		)
 
 # = Edit =
