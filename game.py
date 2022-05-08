@@ -485,7 +485,7 @@ _x,_y,_size = 0,0,0 									#	Transition variables
 tour = 0												#	0 = 1er joueur, 1 = 2nd joueur
 banniere, canvas = [], []								#	Liste des widgets	
 root, grid_frame, banniere_frame = None,None,None		#	Les conteneur tkinter
-IA_MODE = 0 											#	0 = reel 2nd joueur, 1 = aleatoire, 2 = une IA
+IA_MODE = 1 											#	0 = reel 2nd joueur, 1 = aleatoire, 2 = une IA
 color_list = ['white', 'red', 'yellow']					#	Couleur des casses ou jetons
 
 if __name__ == "__main__":
