@@ -235,6 +235,13 @@ def build_menu():
 	root.config(menu=menu)
 	
 def build_grid():
+	""" affiche la grille
+	
+	construit le tableau de jeu
+	en assignant un emplacement pour chaque case
+	et en y attribuant la couleur du joueur qui l'occuppe
+	déclenche un tour en cliquant
+	"""
 	global root, X,Y,SIZE, grid,canvas, grid_frame
 
 	canvas = []
